@@ -56,7 +56,7 @@ namespace ApiWorld.Controllers.Lynda.H_Sport
             {
                 return BadRequest(customer);
             }
-
+            int a = 0;
             _h_Plus_SportsContext.Entry(customer).State = EntityState.Modified;
            int resualt= await _h_Plus_SportsContext.SaveChangesAsync();
 
