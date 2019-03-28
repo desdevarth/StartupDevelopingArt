@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiWorld.Middlewares;
 using H_Sport.Models;
 using H_SportServices.Intefaces;
 using H_SportServices.Services;
@@ -30,13 +31,23 @@ namespace ApiWorld
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region AppServices
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IProductService, ProductService>();
+
+            #endregion
+
+            #region AppMiddlewares
+            
+            #endregion
+
+
             var h_SportConnectionString = "Data Source=.;Initial Catalog=H_Plus_Sports;Integrated Security=True";
             services.AddDbContext<H_Plus_SportsContext>(options => options.UseSqlServer(h_SportConnectionString));
 
             
             services.AddMemoryCache(option=> new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(5)));
             services.AddResponseCaching();
-            services.AddScoped<ICustomerService, CustomerService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }
@@ -52,7 +63,9 @@ namespace ApiWorld
             {
                 app.UseHsts();
             }
-            
+
+            //app.UseMiddleware<IpCheckerMiddleware>();
+
             app.UseResponseCaching();
             app.UseHttpsRedirection();
             //app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();

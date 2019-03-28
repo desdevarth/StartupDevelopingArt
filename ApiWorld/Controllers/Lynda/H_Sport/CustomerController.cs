@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using H_Sport.Models;
 using H_SportServices.Intefaces;
 using H_SportServices.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiWorld.Controllers.Lynda.H_Sport
 {
+    [Authorize]
+
     [Route("api/[controller]/[action]")]
      [ApiController]
   
@@ -23,6 +27,14 @@ namespace ApiWorld.Controllers.Lynda.H_Sport
         {
             _h_Plus_SportsContext = h_Plus_SportsContext;
             _customerService = customerService;
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetToken()
+        {
+            var jwt = new JwtSecurityToken();
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
         }
 
         [HttpDelete("{id}")]
